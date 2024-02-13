@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "chronomanager"
+version = "1.0.0"
+description = "This project is a calendar management application that allows users to create and manage events, receive notifications about upcoming events, and integrate with external calendars such as Google Calendar."
+authors = ["Artem <vebulogmetra@yandex.ru>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiosqlite = "^0.19.0"
+alembic = "^1.13.1"
+sqlalchemy = "^2.0.27"
+python-dotenv = "^1.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8-pyproject = "^1.2.3"
+isort = "^5.13.2"
+black = "^24.2.0"
+fastapi = {extras = ["all"], version = "^0.109.2"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+line_length = 90
+force_grid_wrap = 2
+
+[tool.black]
+line-length = 90
+target-version = ['py310']
+
+[tool.flake8]
+exclude = [".git", ".pytest_cache", "tests", "__pycache__", "env", "venv", ".venv"]
+max-line-length = 90
+max-complexity = 8
+ignore = ["W503"]
