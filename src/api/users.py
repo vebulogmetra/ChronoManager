@@ -1,8 +1,7 @@
 from fastapi import APIRouter
-from src.repositories.users import UsersRepository
+from src.services.users import UsersService
 from src.schemas.users import UserSchemaIn, UserSchemaOut
-from random import randint
-from datetime import datetime
+from src.api.dependencies import UOWDep
 
 router = APIRouter(
     prefix="/users",
@@ -14,12 +13,12 @@ users = []
 
 
 @router.get("/users", response_model=list[UserSchemaOut])
-async def get_users_handler():
-    users = await UsersRepository.find_all()
+async def get_users_handler(uow: UOWDep):
+    users = await UsersService().get_users(uow=uow)
     return users
 
 
-@router.post("/user", response_model=list[UserSchemaOut])
-async def create_user_handler(user_data: UserSchemaIn):
-    new_user = await UsersRepository().add_one(data=user_data.model_dump())
-    return new_user
+@router.post("/user")
+async def create_user_handler(user_data: UserSchemaIn, uow: UOWDep):
+    new_user_id = await UsersService().add_user(uow=uow, user=user_data)
+    return new_user_id
