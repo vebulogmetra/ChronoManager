@@ -12,3 +12,8 @@ class Base(DeclarativeBase):
 async def get_async_session():
     async with async_session_maker() as session:
         yield session
+
+
+# async def init_models() -> None:
+#     async with engine.begin() as conn:
+#         await conn.run_sync(Base.metadata.create_all)

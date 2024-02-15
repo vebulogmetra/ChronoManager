@@ -6,12 +6,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 class AbstractRepository(ABC):
     @abstractmethod
-    async def add_one():
-        raise NotImplementedError
+    async def add_one(): ...
 
     @abstractmethod
-    async def find_all():
-        raise NotImplementedError
+    async def find_all(): ...
 
 
 class SQLAlchemyRepository(AbstractRepository):
@@ -25,7 +23,7 @@ class SQLAlchemyRepository(AbstractRepository):
         res = await self.session.execute(stmt)
         return res.scalar_one()
 
-    async def edit_one(self, id: int, data: dict) -> int:
+    async def update_one(self, id: int, data: dict) -> int:
         stmt = update(self.model).values(**data).filter_by(id=id).returning(self.model.id)
         res = await self.session.execute(stmt)
         return res.scalar_one()
