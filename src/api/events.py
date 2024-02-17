@@ -22,8 +22,10 @@ async def create_event_handler(event_data: EventSchemaIn):
         EventSchemaOut(
             id=randint(1, 10),
             title=event_data.title,
+            owner_id=event_data.owner_id,
             description=event_data.description,
             expired_at=event_data.expired_at,
+            notify_at=event_data.notify_at,
             created_at=datetime.now(),
         )
     )

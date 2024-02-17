@@ -7,10 +7,12 @@ class EventSchemaBase(BaseModel):
     title: str
     description: str
     owner_id: Optional[int] = None
-    expired_at: str
+    expired_at: datetime
+    notify_at: datetime
 
     class Config:
         from_attributes = True
+        json_encoders = {datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")}
 
 
 class EventSchemaIn(EventSchemaBase): ...
@@ -25,6 +27,7 @@ class EventSchemaUpdate(BaseModel):
     title: str
     description: str
     expired_at: str
+    notify_at: str
 
     class Config:
         from_attributes = True
