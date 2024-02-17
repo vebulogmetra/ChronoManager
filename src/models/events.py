@@ -12,8 +12,9 @@ class Events(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str]
     description: Mapped[str]
-    expired_at: Mapped[datetime]
     created_at: Mapped[datetime]
+    expired_at: Mapped[datetime]
+    notify_at: Mapped[datetime]
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
 
     def to_schema(self) -> EventSchemaOut:
@@ -23,5 +24,6 @@ class Events(Base):
             description=self.description,
             owner_id=self.owner_id,
             expired_at=self.expired_at,
+            notify_at=self.notify_at,
             created_at=self.created_at,
         )
