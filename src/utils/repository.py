@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import insert, select, update
+from sqlalchemy import insert, select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
@@ -38,4 +38,15 @@ class SQLAlchemyRepository(AbstractRepository):
         stmt = select(self.model).filter_by(**filter_by)
         res = await self.session.execute(stmt)
         res = res.scalar_one().to_schema()
+        return res
+
+    async def find_many(self, filter_by):
+        stmt = select(self.model).filter_by(**filter_by)
+        res = await self.session.execute(stmt)
+        res = [row[0].to_schema() for row in res.all()]
+        return res
+
+    async def delete_one(self, **filter_by) -> int:
+        stmt = delete(self.model).filter_by(**filter_by).returning(self.model.id)
+        res = await self.session.execute(stmt)
         return res
