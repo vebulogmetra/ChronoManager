@@ -1,7 +1,10 @@
 from fastapi import APIRouter
 from random import randint
 from datetime import datetime
-from src.schemas.events import EventSchemaOut, EventSchemaIn
+from src.services.events import EventsService
+from src.schemas.events import EventSchemaOut, EventSchemaIn, EventSchemaCreateResponse
+from typing import Optional
+from src.api.dependencies import UOWDep
 
 router = APIRouter(
     prefix="/events",
@@ -12,21 +15,18 @@ events = []
 
 
 @router.get("/events", response_model=list[EventSchemaOut])
-async def get_events_handler():
+async def get_events_handler(uow: UOWDep):
+    events = await EventsService().get_events(uow=uow)
     return events
 
 
-@router.post("/events", response_model=list[EventSchemaOut])
-async def create_event_handler(event_data: EventSchemaIn):
-    events.append(
-        EventSchemaOut(
-            id=randint(1, 10),
-            title=event_data.title,
-            owner_id=event_data.owner_id,
-            description=event_data.description,
-            expired_at=event_data.expired_at,
-            notify_at=event_data.notify_at,
-            created_at=datetime.now(),
-        )
-    )
+@router.get("/events_today", response_model=list[EventSchemaOut])
+async def get_events_today_handler(uow: UOWDep):
+    events = await EventsService().get_today_events(uow=uow)
     return events
+
+
+@router.post("/events", response_model=EventSchemaCreateResponse)
+async def create_event_handler(event_data: EventSchemaIn, uow: UOWDep):
+    new_event_id: int = await EventsService().add_event(uow=uow, event=event_data)
+    return EventSchemaCreateResponse(event_id=new_event_id)
