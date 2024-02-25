@@ -15,6 +15,10 @@ class EventSchemaBase(BaseModel):
         json_encoders = {datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M:%S")}
 
 
+class EventSchemaCreateResponse(BaseModel):
+    event_id: int
+
+
 class EventSchemaIn(EventSchemaBase): ...
 
 
