@@ -32,3 +32,12 @@ class UserSchemaUpdate(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class UserCreds(BaseModel):
+    login: str
+    password: str
+
+
+class UserToken(BaseModel):
+    token: str
